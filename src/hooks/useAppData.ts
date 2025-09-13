@@ -4,7 +4,9 @@ import {
   MemberService, 
   TaskService, 
   EvidenceService, 
-  RecommendationService 
+  RecommendationService,
+  BackupService,
+  type BackupData 
 } from '../usecase'
 import {
   DexieMemberRepository,
@@ -12,17 +14,20 @@ import {
   DexieEvidenceRepository,
   DexieRecommendationRepository
 } from '../infrastructure'
+import { DexieBackupRepository } from '../infrastructure/db/repositories/backupRepository'
 
 // サービスのインスタンスを作成
 const memberRepository = new DexieMemberRepository()
 const taskRepository = new DexieTaskRepository()
 const evidenceRepository = new DexieEvidenceRepository()
 const recommendationRepository = new DexieRecommendationRepository()
+const backupRepository = new DexieBackupRepository()
 
 const memberService = new MemberService(memberRepository)
 const taskService = new TaskService(taskRepository, memberRepository)
 const evidenceService = new EvidenceService(evidenceRepository, memberRepository, taskRepository)
 const recommendationService = new RecommendationService(recommendationRepository, memberRepository)
+const backupService = new BackupService(backupRepository)
 
 export const useAppData = (familyUid: string) => {
   const [members, setMembers] = useState<Member[]>([])
@@ -152,6 +157,27 @@ export const useAppData = (familyUid: string) => {
     }
   }
 
+  // バックアップ操作
+  const createBackup = async (): Promise<BackupData> => {
+    try {
+      return await backupService.exportData(familyUid)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'バックアップの作成に失敗しました')
+      throw err
+    }
+  }
+
+  const restoreBackup = async (backupData: BackupData) => {
+    try {
+      await backupService.importData(backupData)
+      // データを再読み込み
+      await loadData()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'バックアップの復元に失敗しました')
+      throw err
+    }
+  }
+
   // 初期データ読み込み
   useEffect(() => {
     loadData()
@@ -175,11 +201,14 @@ export const useAppData = (familyUid: string) => {
     updateTaskProgress,
     completeTask,
     addEvidence,
+    createBackup,
+    restoreBackup,
     
     // サービス（直接アクセス用）
     memberService,
     taskService,
     evidenceService,
-    recommendationService
+    recommendationService,
+    backupService
   }
 }

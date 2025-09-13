@@ -5,6 +5,8 @@ import { FamilyUid } from './domain'
 import Dashboard from './components/features/Dashboard'
 import MemberList from './components/features/MemberList'
 import TaskList from './components/features/TaskList'
+import EvidenceList from './components/features/EvidenceList'
+import BackupManagement from './components/features/BackupManagement'
 import { LoadingSpinner } from './components/ui'
 
 // サンプルの家族UID（実際の実装では認証やセットアップで決定）
@@ -25,7 +27,9 @@ function App() {
     addTask,
     updateTaskProgress,
     completeTask,
-    addEvidence
+    addEvidence,
+    createBackup,
+    restoreBackup
   } = useAppData(SAMPLE_FAMILY_UID)
 
   const renderPage = () => {
@@ -53,17 +57,21 @@ function App() {
         )
       case 'evidence':
         return (
-          <div className="text-center py-12">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">エビデンス収集</h2>
-            <p className="text-gray-600">エビデンス収集機能は準備中です</p>
-          </div>
+          <EvidenceList
+            evidence={evidence}
+            members={members}
+            tasks={tasks}
+            loading={loading}
+            onAddEvidence={addEvidence}
+          />
         )
       case 'backup':
         return (
-          <div className="text-center py-12">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">バックアップ</h2>
-            <p className="text-gray-600">バックアップ機能は準備中です</p>
-          </div>
+          <BackupManagement
+            loading={loading}
+            onCreateBackup={createBackup}
+            onRestoreBackup={restoreBackup}
+          />
         )
       default:
         return (

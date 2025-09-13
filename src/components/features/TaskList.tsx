@@ -191,7 +191,7 @@ const TaskList = ({ tasks, members, loading, onAddTask, onUpdateTaskProgress, on
         </CardHeader>
         <CardContent>
           {/* フィルター */}
-          <div className="flex space-x-4 mb-6">
+          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
             <Select
               label="ステータス"
               value={filterStatus}
@@ -231,9 +231,9 @@ const TaskList = ({ tasks, members, loading, onAddTask, onUpdateTaskProgress, on
                 const assignee = members.find(m => m.memberId === task.assigneeMemberId)
                 return (
                   <div key={task.taskId} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex items-start justify-between">
+                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between space-y-4 lg:space-y-0">
                       <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
+                        <div className="flex flex-wrap items-center gap-2 mb-2">
                           <h4 className="text-lg font-medium text-gray-900">{task.title}</h4>
                           <Badge variant={getTypeBadgeVariant(task.type)}>
                             {getTypeLabel(task.type)}
@@ -268,7 +268,7 @@ const TaskList = ({ tasks, members, loading, onAddTask, onUpdateTaskProgress, on
                         </div>
                       </div>
 
-                      <div className="flex space-x-2 ml-4">
+                      <div className="flex flex-col sm:flex-row gap-2 lg:ml-4">
                         <Button
                           variant="outline"
                           size="sm"

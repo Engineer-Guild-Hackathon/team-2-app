@@ -108,7 +108,7 @@ const MemberList = ({ members, loading, onAddMember, onUpdateMember, onDeleteMem
           ) : (
             <div className="space-y-4">
               {members.map((member) => (
-                <div key={member.memberId} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                <div key={member.memberId} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border border-gray-200 rounded-lg">
                   <div className="flex items-center space-x-4">
                     <div className="flex-shrink-0">
                       <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
@@ -134,7 +134,7 @@ const MemberList = ({ members, loading, onAddMember, onUpdateMember, onDeleteMem
                       </div>
                     </div>
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <Button
                       variant="outline"
                       size="sm"

@@ -116,7 +116,7 @@ const Dashboard = ({ members, tasks, evidence, loading }: DashboardProps) => {
   return (
     <div className="space-y-6">
       {/* 概要統計 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
         <Card>
           <CardContent>
             <div className="p-6">
@@ -198,7 +198,7 @@ const Dashboard = ({ members, tasks, evidence, loading }: DashboardProps) => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
         {/* 完了率 */}
         <Card>
           <CardHeader>
