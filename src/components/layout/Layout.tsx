@@ -6,9 +6,10 @@ interface LayoutProps {
   children: ReactNode
   currentPage?: string
   onPageChange?: (page: string) => void
+  onBackToRoleSelection?: () => void
 }
 
-const Layout = ({ children, currentPage = 'dashboard', onPageChange }: LayoutProps) => {
+const Layout = ({ children, currentPage = 'dashboard', onPageChange, onBackToRoleSelection }: LayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const sidebarItems = [
@@ -95,6 +96,7 @@ const Layout = ({ children, currentPage = 'dashboard', onPageChange }: LayoutPro
       <div className="flex flex-col w-0 flex-1 overflow-hidden">
         <Header 
           onMenuClick={() => setIsSidebarOpen(true)}
+          onBackToRoleSelection={onBackToRoleSelection}
         />
         
         <main className="flex-1 relative overflow-y-auto focus:outline-none">

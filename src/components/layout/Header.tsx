@@ -4,9 +4,10 @@ import { Button } from '../ui'
 interface HeaderProps {
   familyName?: string
   onMenuClick?: () => void
+  onBackToRoleSelection?: () => void
 }
 
-const Header = ({ familyName = 'ほめログ', onMenuClick }: HeaderProps) => {
+const Header = ({ familyName = 'ほめログ', onMenuClick, onBackToRoleSelection }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
@@ -48,6 +49,15 @@ const Header = ({ familyName = 'ほめログ', onMenuClick }: HeaderProps) => {
 
           {/* Actions */}
           <div className="flex items-center space-x-4">
+            {onBackToRoleSelection && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={onBackToRoleSelection}
+              >
+                役割選択に戻る
+              </Button>
+            )}
             <Button variant="outline" size="sm">
               バックアップ
             </Button>
@@ -57,7 +67,7 @@ const Header = ({ familyName = 'ほめログ', onMenuClick }: HeaderProps) => {
                 className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                  <span className="text-sm font-medium text-blue-600">家</span>
+                  <span className="text-sm font-medium text-blue-600">🏚</span>
                 </div>
               </button>
               
