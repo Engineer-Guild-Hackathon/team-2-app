@@ -7,11 +7,12 @@ interface ChildEvidenceUploadProps {
   tasks: Task[]
   onAddEvidence: (evidence: Omit<Evidence, 'familyUid' | 'evidenceId' | 'createdAt'>) => Promise<Evidence>
   onBack: () => void
+  initialTaskId?: string
 }
 
-const ChildEvidenceUpload = ({ child, tasks, onAddEvidence, onBack }: ChildEvidenceUploadProps) => {
+const ChildEvidenceUpload = ({ child, tasks, onAddEvidence, onBack, initialTaskId }: ChildEvidenceUploadProps) => {
   const [selectedType, setSelectedType] = useState<Evidence['kind'] | null>(null)
-  const [selectedTask, setSelectedTask] = useState<string | null>(null)
+  const [selectedTask, setSelectedTask] = useState<string | null>(initialTaskId ?? null)
   const [text, setText] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
@@ -203,6 +204,7 @@ const ChildEvidenceUpload = ({ child, tasks, onAddEvidence, onBack }: ChildEvide
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                   <button
                     onClick={() => setSelectedTask(null)}
+                    aria-pressed={selectedTask === null}
                     className={`p-4 border-2 rounded-xl text-left transition-colors ${
                       selectedTask === null 
                         ? 'border-blue-500 bg-blue-50' 
@@ -218,6 +220,7 @@ const ChildEvidenceUpload = ({ child, tasks, onAddEvidence, onBack }: ChildEvide
                     <button
                       key={task.taskId}
                       onClick={() => setSelectedTask(task.taskId)}
+                      aria-pressed={selectedTask === task.taskId}
                       className={`p-4 border-2 rounded-xl text-left transition-colors ${
                         selectedTask === task.taskId 
                           ? 'border-blue-500 bg-blue-50' 

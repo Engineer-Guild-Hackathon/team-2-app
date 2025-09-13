@@ -25,6 +25,8 @@ const ChildDashboard = ({
   const [completedTaskTitle, setCompletedTaskTitle] = useState('')
   const [showEvidenceUpload, setShowEvidenceUpload] = useState(false)
   const [showTaskAdd, setShowTaskAdd] = useState(false)
+  const [evidenceTaskId, setEvidenceTaskId] = useState<string | null>(null)
+  const [mood, setMood] = useState<'genki' | 'futsu' | 'tukare'>('futsu')
 
   // 子どものタスクのみフィルタ
   const childTasks = tasks.filter(task => task.assigneeMemberId === child.memberId)
@@ -81,7 +83,11 @@ const ChildDashboard = ({
         child={child}
         tasks={tasks}
         onAddEvidence={onAddEvidence}
-        onBack={() => setShowEvidenceUpload(false)}
+        initialTaskId={evidenceTaskId ?? undefined}
+        onBack={() => {
+          setShowEvidenceUpload(false)
+          setEvidenceTaskId(null)
+        }}
       />
     )
   }
@@ -135,14 +141,36 @@ const ChildDashboard = ({
                 <p className="text-lg text-gray-600">きょうも がんばろうね！</p>
               </div>
             </div>
-            <Button
-              onClick={onBackToRoleSelection}
-              variant="outline"
-              size="lg"
-              className="text-lg"
-            >
-              もどる
-            </Button>
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex items-center gap-2" aria-label="今日の調子">
+                <button
+                  type="button"
+                  aria-pressed={mood === 'genki'}
+                  onClick={() => setMood('genki')}
+                  className={`px-3 py-1 rounded-full border text-sm ${mood === 'genki' ? 'bg-green-100 border-green-300 text-green-800' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'}`}
+                >元気</button>
+                <button
+                  type="button"
+                  aria-pressed={mood === 'futsu'}
+                  onClick={() => setMood('futsu')}
+                  className={`px-3 py-1 rounded-full border text-sm ${mood === 'futsu' ? 'bg-blue-100 border-blue-300 text-blue-800' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'}`}
+                >ふつう</button>
+                <button
+                  type="button"
+                  aria-pressed={mood === 'tukare'}
+                  onClick={() => setMood('tukare')}
+                  className={`px-3 py-1 rounded-full border text-sm ${mood === 'tukare' ? 'bg-yellow-100 border-yellow-300 text-yellow-800' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'}`}
+                >つかれ気味</button>
+              </div>
+              <Button
+                onClick={onBackToRoleSelection}
+                variant="outline"
+                size="lg"
+                className="text-lg"
+              >
+                もどる
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -228,6 +256,18 @@ const ChildDashboard = ({
                               {getTaskTypeLabel(task.type)}
                             </span>
                           </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            className="text-sm bg-purple-50 text-purple-800 border border-purple-300 hover:bg-purple-100"
+                            onClick={() => {
+                              setEvidenceTaskId(task.taskId)
+                              setShowEvidenceUpload(true)
+                            }}
+                          >
+                            証拠＋
+                          </Button>
                         </div>
                       </div>
 
