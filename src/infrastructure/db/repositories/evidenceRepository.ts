@@ -38,7 +38,11 @@ export class DexieEvidenceRepository implements EvidenceRepository {
       await db.evidence
         .where('[familyUid+evidenceId]')
         .equals([evidence.familyUid, evidence.evidenceId])
-        .modify(evidence);
+        .modify({
+          blobRef: evidence.blobRef,
+          text: evidence.text,
+          tags: evidence.tags
+        });
     } else {
       await db.evidence.add({
         ...evidence,

@@ -24,7 +24,7 @@ export class HomeLogDB extends Dexie {
     });
 
     this.members.hook('updating', function (modifications, primKey, obj, trans) {
-      modifications.updatedAt = Date.now();
+      (modifications as any).updatedAt = Date.now();
     });
 
     this.tasks.hook('creating', function (primKey, obj, trans) {
@@ -33,7 +33,7 @@ export class HomeLogDB extends Dexie {
     });
 
     this.tasks.hook('updating', function (modifications, primKey, obj, trans) {
-      modifications.updatedAt = Date.now();
+      (modifications as any).updatedAt = Date.now();
     });
 
     this.evidence.hook('creating', function (primKey, obj, trans) {

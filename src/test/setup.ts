@@ -4,9 +4,14 @@ import '@testing-library/jest-dom'
 import 'fake-indexeddb/auto'
 
 // Mock crypto for testing (Node.js doesn't have Web Crypto API by default)
-import { webcrypto } from 'crypto'
+// @ts-ignore
+const { webcrypto } = require('crypto')
 
+// Only set crypto if it's not already available
 if (!globalThis.crypto) {
-  // @ts-ignore
-  globalThis.crypto = webcrypto
+  Object.defineProperty(globalThis, 'crypto', {
+    value: webcrypto,
+    configurable: true,
+    enumerable: true
+  })
 }

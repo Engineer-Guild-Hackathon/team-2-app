@@ -2,7 +2,7 @@ import { Member, Role } from './entities';
 
 export class MemberCodeService {
   static generateMemberCode(): string {
-    const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const characters = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // Removed I, O, L, 0, 1
     let result = '';
     for (let i = 0; i < 6; i++) {
       result += characters.charAt(Math.floor(Math.random() * characters.length));
@@ -11,7 +11,7 @@ export class MemberCodeService {
   }
 
   static isValidMemberCode(code: string): boolean {
-    return /^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{6}$/.test(code);
+    return /^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$/.test(code);
   }
 }
 
@@ -54,7 +54,9 @@ export class TaskValidationService {
 
   static isTaskOverdue(due?: string): boolean {
     if (!due) return false;
-    return new Date(due) < new Date();
+    const dueDate = new Date(due + 'T23:59:59'); // End of due date
+    const today = new Date();
+    return dueDate < today;
   }
 
   static canAddEvidence(status: string): boolean {

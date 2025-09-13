@@ -144,6 +144,20 @@ export class EncryptionService {
   }
 
   /**
+   * Convert Uint8Array to Base64 string
+   */
+  uint8ArrayToBase64(array: Uint8Array): string {
+    return this.arrayBufferToBase64(array.buffer);
+  }
+
+  /**
+   * Convert Base64 string to Uint8Array
+   */
+  base64ToUint8Array(base64: string): Uint8Array {
+    return new Uint8Array(this.base64ToArrayBuffer(base64));
+  }
+
+  /**
    * Create an encrypted backup package
    */
   async createEncryptedBackup(data: string, password: string): Promise<{
@@ -158,8 +172,8 @@ export class EncryptionService {
 
     return {
       encryptedData: this.arrayBufferToBase64(encryptedData),
-      salt: this.arrayBufferToBase64(salt),
-      iv: this.arrayBufferToBase64(iv),
+      salt: this.uint8ArrayToBase64(salt),
+      iv: this.uint8ArrayToBase64(iv),
       version: '1.0'
     };
   }
@@ -177,8 +191,8 @@ export class EncryptionService {
       throw new Error(`Unsupported encryption version: ${encryptedPackage.version}`);
     }
 
-    const salt = new Uint8Array(this.base64ToArrayBuffer(encryptedPackage.salt));
-    const iv = new Uint8Array(this.base64ToArrayBuffer(encryptedPackage.iv));
+    const salt = this.base64ToUint8Array(encryptedPackage.salt);
+    const iv = this.base64ToUint8Array(encryptedPackage.iv);
     const encryptedData = this.base64ToArrayBuffer(encryptedPackage.encryptedData);
 
     const key = await this.deriveKeyFromPassword(password, salt);
