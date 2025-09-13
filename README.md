@@ -13,3 +13,11 @@
 ## デモ　/ プレゼン資料
 - デモURL: 
 - プレゼンURL：https://docs.google.com/presentation/d/1vrlo43zzdNn3NmG1qAmoscR1XhxadIqN8Jq9OlPvZQQ/edit?usp=sharing
+
+---
+
+## 技術構成
+- フロントエンド: React + TypeScript + Vite + Tailwind CSS
+- ローカルDB: IndexedDB + Dexie
+- アーキテクチャ: クリーンアーキテクチャ
+- テスト: Vitest + React Testing Library
