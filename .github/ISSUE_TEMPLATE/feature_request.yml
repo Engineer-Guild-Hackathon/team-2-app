@@ -1,0 +1,33 @@
+name: 機能要望 (Feature Request)
+about: 新しい機能の追加や改善を提案するためのテンプレートです。
+title: 'Feature: '
+labels: ['type:feature']
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        機能要望ありがとうございます！以下を埋めていただけると検討しやすくなります。
+  - type: textarea
+    id: feature_description
+    attributes:
+      label: 機能の説明
+      placeholder: “どのような機能かをできるだけ具体的に”
+  - type: textarea
+    id: motivation
+    attributes:
+      label: 動機 / 背景
+      placeholder: “なぜこの機能が必要か”
+  - type: textarea
+    id: possible_solution
+    attributes:
+      label: 解決案（あれば）
+      description: アイディアがあれば記載してください
+      optional: true
+  - type: input
+    id: version_or_env
+    attributes:
+      label: 環境 / 対応バージョン
+      description: Node.js / Go / プラットフォーム 等
+      placeholder: “例: Node.js 18 / Go 1.23 / Web / CLI”

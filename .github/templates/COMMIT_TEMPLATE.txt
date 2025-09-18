@@ -1,0 +1,16 @@
+# コミットメッセージ テンプレート
+#
+# 規則例: <type>(<scope>): <短い説明>
+# type: feat, fix, refactor, docs, style, test, chore, ci, perf
+# scope は省略可能。例えば frontend, backend など
+#
+# 説明: “何をしたか” を命令形で簡潔に。大文字開始。末尾にピリオドをつけない。
+#
+# 空行
+#
+# 本文（オプション）:
+#   “なぜその変更をしたのか”、”どのような制約があったか”、”将来の影響”などを書きます。
+#
+# フッター（オプション）:
+#   関連 Issue 番号、BREAKING CHANGE 等
+

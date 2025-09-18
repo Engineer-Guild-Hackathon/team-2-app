@@ -1,0 +1,48 @@
+name: バグ報告 (Bug Report)
+about: プロジェクトで発見された不具合を報告するためのテンプレートです。
+title: 'Bug: '
+labels: ['type:bug']
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        不具合を報告してくれてありがとうございます！以下のテンプレートを埋めていただけると助かります。
+  - type: textarea
+    id: description
+    attributes:
+      label: 説明
+      description: 何がどう動かないのかをできるだけ具体的に
+      placeholder: “〜をしたら、〜が期待どおりに動きません。”
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: 再現手順
+      description: 不具合を再現するためのステップを順番に
+      placeholder: |
+        1. 〜を開く  
+        2. 〜をクリックする  
+        3. 〜を入力して送信する
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: 期待される動作
+      placeholder: “こうなるべき、という動作を記述”
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: 実際の動作
+      placeholder: “実際にはこうなった”
+  - type: input
+    id: version
+    attributes:
+      label: 環境 / バージョン情報
+      description: OS, Node.js や Go のバージョンなど
+      placeholder: “例: Node.js 18 / Go 1.23 / Ubuntu 22.04”
+  - type: textarea
+    id: additional_info
+    attributes:
+      label: 補足情報
+      description: ログ・スクリーンショットなどがあれば
+      optional: true
