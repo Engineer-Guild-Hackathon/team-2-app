@@ -376,14 +376,16 @@ const TaskList = ({ tasks, members, loading, onAddTask, onUpdateTaskProgress, on
                   type="range"
                   min="0"
                   max="100"
-                  step="10"
+                  step="25"
                   value={formData.progress}
                   onChange={(e) => setFormData({ ...formData, progress: parseInt(e.target.value) })}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                 />
                 <div className="flex justify-between text-xs text-gray-500 mt-1">
                   <span>0%</span>
+                  <span>25%</span>
                   <span>50%</span>
+                  <span>75%</span>
                   <span>100%</span>
                 </div>
               </div>
