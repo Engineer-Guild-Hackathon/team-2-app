@@ -9,6 +9,7 @@ import EvidenceList from './features/EvidenceList'
 import BackupManagement from './features/BackupManagement'
 import RoleSelection from './features/RoleSelection'
 import ChildDashboard from './features/ChildDashboard'
+import { AdultAIRecommendations } from './features/AdultAIRecommendations'
 import { Button } from './ui'
 
 // サンプルの家族UID（実際の実装では認証やセットアップで決定）
@@ -44,6 +45,9 @@ function MainApp() {
         // 子どもが1人だけの場合は自動選択
         setSelectedChild(children[0].memberId)
       }
+    } else if (role === 'adult') {
+      // 大人の場合、AIおすすめページに遷移
+      setCurrentPage('ai-recommendations')
     }
   }
 
@@ -233,6 +237,12 @@ function MainApp() {
             onRestoreBackup={restoreBackup}
           />
         )
+      case 'ai-recommendations':
+        return (
+          <AdultAIRecommendations
+            loading={loading}
+          />
+        )
       default:
         return (
           <Dashboard
@@ -282,6 +292,7 @@ function MainApp() {
             {currentPage === 'tasks' && 'タスク管理'}
             {currentPage === 'evidence' && 'エビデンス収集'}
             {currentPage === 'backup' && 'バックアップ'}
+            {currentPage === 'ai-recommendations' && 'AIおすすめ'}
           </h1>
         </div>
 
