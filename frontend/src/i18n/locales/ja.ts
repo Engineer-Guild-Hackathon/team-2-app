@@ -110,6 +110,39 @@ export const ja = {
     apply: '適用'
   },
 
+  // Filter Drawer
+  filter: {
+    title: 'フィルタ設定',
+    description: '表示するおすすめをカスタマイズできます',
+    categories: 'カテゴリ',
+    price: '料金',
+    distance: '距離',
+    radius: '以内',
+    radiusSlider: '検索範囲スライダー',
+    ageRange: '年齢範囲',
+    ageMin: '最小年齢',
+    ageMax: '最大年齢',
+    openNow: '現在営業中のみ',
+    accessibility: 'アクセシビリティ',
+    tags: 'タグ',
+    free: '無料',
+    paid: '有料',
+    clearAll: 'すべてクリア',
+    apply: 'フィルタを適用',
+    clearedAll: 'すべてのフィルタをクリアしました',
+    applied: 'フィルタを適用しました',
+    filtersActive: '個のフィルタが有効'
+  },
+
+  // Categories (for filter drawer)
+  categories: {
+    park: '公園',
+    museum: '博物館',
+    library: '図書館',
+    book: '本',
+    event: 'イベント'
+  },
+
   // Sort
   sort: {
     title: '並び替え',

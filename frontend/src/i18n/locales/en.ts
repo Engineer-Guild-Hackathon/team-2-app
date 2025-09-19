@@ -110,6 +110,39 @@ export const en = {
     apply: 'Apply'
   },
 
+  // Filter Drawer
+  filter: {
+    title: 'Filter Settings',
+    description: 'Customize which recommendations to display',
+    categories: 'Categories',
+    price: 'Price',
+    distance: 'Distance',
+    radius: 'within',
+    radiusSlider: 'Search radius slider',
+    ageRange: 'Age Range',
+    ageMin: 'Min Age',
+    ageMax: 'Max Age',
+    openNow: 'Currently Open Only',
+    accessibility: 'Accessibility',
+    tags: 'Tags',
+    free: 'Free',
+    paid: 'Paid',
+    clearAll: 'Clear All',
+    apply: 'Apply Filters',
+    clearedAll: 'All filters cleared',
+    applied: 'Filters applied',
+    filtersActive: 'filters active'
+  },
+
+  // Categories (for filter drawer)
+  categories: {
+    park: 'Parks',
+    museum: 'Museums',
+    library: 'Libraries',
+    book: 'Books',
+    event: 'Events'
+  },
+
   // Sort
   sort: {
     title: 'Sort By',
