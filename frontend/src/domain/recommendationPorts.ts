@@ -12,6 +12,14 @@ import {
   AnalyticsEvent
 } from '../types/recommendation';
 
+// 行動ログ駆動レコメンド用Portsを再エクスポート
+export {
+  TelemetryPort,
+  MLPort,
+  BehaviorDrivenRecommendationPort,
+  CatalogPort as BehaviorCatalogPort
+} from '../types/recommendation';
+
 export interface RecommendationPort {
   getRecommendations(query: RecommendQuery): Promise<Recommendation[]>;
   getItemDetail(id: string): Promise<RecommendationDetail>;
