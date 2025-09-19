@@ -25,7 +25,7 @@ const RoleSelection = ({ onRoleSelect }: RoleSelectionProps) => {
           <p className="text-xl text-gray-600">だれがつかいますか？</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* 大人用 */}
           <Card className={`cursor-pointer transition-all duration-300 hover:scale-105 ${
             selectedRole === 'adult' ? 'ring-4 ring-blue-500 scale-105' : ''
@@ -67,6 +67,29 @@ const RoleSelection = ({ onRoleSelect }: RoleSelectionProps) => {
               </button>
             </CardContent>
           </Card>
+        </div>
+
+        <div className="text-center mt-12">
+          <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 shadow-lg">
+            <h3 className="text-2xl font-bold text-white mb-4">🤖 AIおすすめ機能</h3>
+            <p className="text-blue-100 mb-6">
+              AIがあなたにぴったりの学習スポットや本をおすすめします
+            </p>
+            <div className="flex justify-center space-x-4">
+              <a
+                href="/recommendations/learner"
+                className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+              >
+                🎓 学習者モード（子供向け）
+              </a>
+              <button
+                onClick={() => handleRoleClick('adult')}
+                className="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors border border-purple-200"
+              >
+                👨‍👩‍👧‍👦 家族モード（大人向け）
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="text-center mt-8">
