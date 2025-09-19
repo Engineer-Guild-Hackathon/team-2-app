@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Recommendation } from '../../../types/recommendation';
 import { useTranslation } from '../../../i18n/i18nContext';
 import Badge from '../../ui/Badge';
 import { Card } from '../../ui/Card';
+import { LazyImage } from '../../ui/LazyImage';
 
 interface RecommendationCardProps {
   recommendation: Recommendation;
@@ -10,7 +11,7 @@ interface RecommendationCardProps {
   className?: string;
 }
 
-export function RecommendationCard({
+export const RecommendationCard = memo(function RecommendationCard({
   recommendation,
   onClick,
   className = ''
@@ -41,11 +42,10 @@ export function RecommendationCard({
       <div className="relative">
         {recommendation.thumbnail && (
           <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-gray-100">
-            <img
+            <LazyImage
               src={recommendation.thumbnail}
               alt={`${recommendation.title} ${t('a11y.imageAlt')}`}
               className="h-full w-full object-cover"
-              loading="lazy"
             />
           </div>
         )}
@@ -139,4 +139,4 @@ export function RecommendationCard({
       </div>
     </Card>
   );
-}
+});

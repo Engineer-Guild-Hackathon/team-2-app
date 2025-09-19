@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useParams } from 'react-router-dom';
 import {
   Recommendation,
   RecommendationCategory,
@@ -7,30 +7,40 @@ import {
   GeoPoint
 } from '../../../types/recommendation';
 import { useTranslation } from '../../../i18n/i18nContext';
+import { useErrorHandler } from '../../../hooks/useErrorHandler';
+import { useAnnouncement } from '../../../hooks/useAnnouncement';
 import { Container } from '../../../infrastructure/container';
 import { RecommendationCard } from './RecommendationCard';
 import { CategoryTabs } from './CategoryTabs';
 import { ModeSelector } from './ModeSelector';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import Button from '../../ui/Button';
+import { ErrorAlert } from '../../ui/ErrorAlert';
+import { OfflineIndicator } from '../../ui/OfflineIndicator';
+import { SkipLink } from '../../ui/SkipLink';
 
 interface RecommendationsHomeProps {
-  onRecommendationClick: (recommendation: Recommendation) => void;
+  onRecommendationClick?: (recommendation: Recommendation) => void;
 }
 
 export function RecommendationsHome({ onRecommendationClick }: RecommendationsHomeProps) {
+  const handleRecommendationClick = onRecommendationClick || (() => {});
   const { t } = useTranslation();
+  const { error, clearError, handleError, retryLastAction, isRetrying } = useErrorHandler();
+  const { announceSearchResults, announceLoading, announceError } = useAnnouncement();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { mode } = useParams<{ mode: string }>();
 
   // State
-  const [selectedMode, setSelectedMode] = useState<RecommendationMode>('learner');
+  const [selectedMode, setSelectedMode] = useState<RecommendationMode>(
+    (mode as RecommendationMode) || 'learner'
+  );
   const [selectedCategory, setSelectedCategory] = useState<RecommendationCategory | null>(null);
   const [currentLocation, setCurrentLocation] = useState<GeoPoint | null>(null);
   const [todaysRecommendations, setTodaysRecommendations] = useState<Recommendation[]>([]);
   const [nearbyRecommendations, setNearbyRecommendations] = useState<Recommendation[]>([]);
   const [categoryRecommendations, setCategoryRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [locationPermissionStatus, setLocationPermissionStatus] = useState<'unknown' | 'granted' | 'denied'>('unknown');
 
   // Services
@@ -68,34 +78,50 @@ export function RecommendationsHome({ onRecommendationClick }: RecommendationsHo
 
       if ('type' in result) {
         setLocationPermissionStatus('denied');
-        setError(result.message);
+        handleError(new Error(result.message), {
+          component: 'RecommendationsHome',
+          action: 'requestLocationPermission'
+        });
       } else {
         setLocationPermissionStatus('granted');
         setCurrentLocation(result.coords);
-        setError(null);
+        clearError();
       }
     } catch (err) {
       setLocationPermissionStatus('denied');
-      setError(err instanceof Error ? err.message : t('error.location'));
+      handleError(err as Error, {
+        component: 'RecommendationsHome',
+        action: 'requestLocationPermission'
+      });
     }
-  }, [aiRecommendationService, t]);
+  }, [aiRecommendationService, handleError, clearError]);
 
   // Load today's recommendations
   const loadTodaysRecommendations = useCallback(async () => {
     try {
       setLoading(true);
+      announceLoading('今日のおすすめ');
+
       const recommendations = await aiRecommendationService.getTodaysRecommendations(
         currentLocation || undefined,
         selectedMode
       );
+
       setTodaysRecommendations(recommendations);
+      announceSearchResults(recommendations.length, '今日のおすすめ');
+      clearError();
     } catch (err) {
       console.error('Failed to load today\'s recommendations:', err);
-      setError(err instanceof Error ? err.message : t('error.general'));
+      const errorMessage = err instanceof Error ? err.message : 'おすすめの読み込みに失敗しました';
+      announceError(errorMessage);
+      handleError(err as Error, {
+        component: 'RecommendationsHome',
+        action: 'loadTodaysRecommendations'
+      });
     } finally {
       setLoading(false);
     }
-  }, [aiRecommendationService, currentLocation, selectedMode, t]);
+  }, [aiRecommendationService, currentLocation, selectedMode, handleError, clearError, announceLoading, announceSearchResults, announceError]);
 
   // Load nearby recommendations
   const loadNearbyRecommendations = useCallback(async () => {
@@ -109,6 +135,10 @@ export function RecommendationsHome({ onRecommendationClick }: RecommendationsHo
       setNearbyRecommendations(recommendations);
     } catch (err) {
       console.error('Failed to load nearby recommendations:', err);
+      handleError(err as Error, {
+        component: 'RecommendationsHome',
+        action: 'loadNearbyRecommendations'
+      });
     }
   }, [aiRecommendationService, currentLocation, selectedMode]);
 
@@ -128,6 +158,10 @@ export function RecommendationsHome({ onRecommendationClick }: RecommendationsHo
       setCategoryRecommendations(recommendations);
     } catch (err) {
       console.error('Failed to load category recommendations:', err);
+      handleError(err as Error, {
+        component: 'RecommendationsHome',
+        action: 'loadCategoryRecommendations'
+      });
     }
   }, [aiRecommendationService, selectedCategory, currentLocation, selectedMode]);
 
@@ -171,7 +205,11 @@ export function RecommendationsHome({ onRecommendationClick }: RecommendationsHo
   }, [aiRecommendationService, requestLocationPermission]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+    <>
+      <SkipLink targetId="main-content" />
+      <OfflineIndicator />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+        <main id="main-content" tabIndex={-1}>
       {/* Header */}
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -243,26 +281,12 @@ export function RecommendationsHome({ onRecommendationClick }: RecommendationsHo
 
       {/* Error State */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-sm font-medium text-red-900">
-                {t('error.general')}
-              </h3>
-              <p className="text-sm text-red-700 mt-1">{error}</p>
-            </div>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setError(null);
-                loadTodaysRecommendations();
-              }}
-              className="ml-4"
-            >
-              {t('common.retry')}
-            </Button>
-          </div>
-        </div>
+        <ErrorAlert
+          error={error}
+          onRetry={retryLastAction}
+          onDismiss={clearError}
+          className="mb-6"
+        />
       )}
 
       {/* Loading State */}
@@ -283,7 +307,7 @@ export function RecommendationsHome({ onRecommendationClick }: RecommendationsHo
               <RecommendationCard
                 key={recommendation.id}
                 recommendation={recommendation}
-                onClick={onRecommendationClick}
+                onClick={handleRecommendationClick}
               />
             ))}
           </div>
@@ -306,7 +330,7 @@ export function RecommendationsHome({ onRecommendationClick }: RecommendationsHo
               <RecommendationCard
                 key={recommendation.id}
                 recommendation={recommendation}
-                onClick={onRecommendationClick}
+                onClick={handleRecommendationClick}
               />
             ))}
           </div>
@@ -324,7 +348,7 @@ export function RecommendationsHome({ onRecommendationClick }: RecommendationsHo
               <RecommendationCard
                 key={recommendation.id}
                 recommendation={recommendation}
-                onClick={onRecommendationClick}
+                onClick={handleRecommendationClick}
               />
             ))}
           </div>
@@ -335,6 +359,8 @@ export function RecommendationsHome({ onRecommendationClick }: RecommendationsHo
           )}
         </section>
       )}
-    </div>
+        </main>
+      </div>
+    </>
   );
 }

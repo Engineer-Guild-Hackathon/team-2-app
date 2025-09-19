@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { RecommendationDetail, RecommendationMode } from '../../../types/recommendation';
 import { useTranslation } from '../../../i18n/i18nContext';
+import { useFocusManagement } from '../../../hooks/useFocusManagement';
 import { Container } from '../../../infrastructure/container';
 import Modal from '../../ui/Modal';
 import Button from '../../ui/Button';
@@ -21,6 +22,10 @@ export function RecommendationDetailModal({
   mode
 }: RecommendationDetailModalProps) {
   const { t } = useTranslation();
+  const { containerRef } = useFocusManagement(isOpen, {
+    returnFocusOnCleanup: true,
+    trapFocus: true
+  });
   const [detail, setDetail] = useState<RecommendationDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,6 +71,7 @@ export function RecommendationDetailModal({
       onClose={onClose}
       title={detail?.title || '詳細情報'}
       className="max-w-4xl max-h-[90vh] overflow-y-auto"
+      aria-describedby="modal-description"
     >
       {loading && (
         <div className="flex justify-center py-12">
