@@ -111,3 +111,25 @@ export interface AnalyticsEvent {
   eventName: string;
   payload: Record<string, any>;
 }
+
+export interface FilterOptions {
+  categories: RecommendationCategory[];
+  priceRange: {
+    free?: boolean;
+    paid?: boolean;
+  };
+  accessibility: string[];
+  radius: number;
+  openNow: boolean;
+  ageRange: {
+    min?: number;
+    max?: number;
+  };
+  tags: string[];
+}
+
+export interface FilterState {
+  isOpen: boolean;
+  options: FilterOptions;
+  appliedFilters: FilterOptions;
+}
