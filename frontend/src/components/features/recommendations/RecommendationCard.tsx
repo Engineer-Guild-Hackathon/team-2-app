@@ -1,36 +1,127 @@
-import React, { memo } from 'react';
-import { Recommendation } from '../../../types/recommendation';
+import React, { memo, useRef, useEffect } from 'react';
+import { Recommendation, RankedRecommendation, TelemetryEvent } from '../../../types/recommendation';
 import { useTranslation } from '../../../i18n/i18nContext';
+import { Container } from '../../../infrastructure/container';
 import Badge from '../../ui/Badge';
 import { Card } from '../../ui/Card';
 import { LazyImage } from '../../ui/LazyImage';
+import { WhyButton } from '../../ui/WhyTooltip';
 
 interface RecommendationCardProps {
-  recommendation: Recommendation;
-  onClick: (recommendation: Recommendation) => void;
+  recommendation: Recommendation | RankedRecommendation;
+  onClick: (recommendation: Recommendation | RankedRecommendation) => void;
   className?: string;
+  trackViewTime?: boolean; // view_itemイベントの追跡を有効にするか
 }
 
 export const RecommendationCard = memo(function RecommendationCard({
   recommendation,
   onClick,
-  className = ''
+  className = '',
+  trackViewTime = true
 }: RecommendationCardProps) {
   const { t } = useTranslation();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const viewStartTime = useRef<number | null>(null);
+  const hasLogged = useRef(false);
+
+  const container = Container.getInstance();
+  const telemetryPort = container.getTelemetryPort();
+
+  // RankedRecommendationかどうかを判定
+  const isRankedRecommendation = (rec: Recommendation | RankedRecommendation): rec is RankedRecommendation => {
+    return 'why' in rec && 'score' in rec;
+  };
+
+  const rankedRec = isRankedRecommendation(recommendation) ? recommendation : null;
+
+  // view_itemイベントの記録
+  const logViewItem = (dwellMs: number, scrollDepth: number = 0.5) => {
+    if (!trackViewTime || hasLogged.current) return;
+
+    const event: TelemetryEvent = {
+      name: 'view_item',
+      ts: new Date().toISOString(),
+      payload: {
+        id: recommendation.id,
+        kind: recommendation.kind,
+        dwell_ms: dwellMs,
+        scroll_depth: scrollDepth,
+        category: rankedRec?.category || recommendation.kind,
+        tags: recommendation.tags,
+        score: rankedRec?.score || 0,
+        distanceKm: recommendation.distanceKm
+      }
+    };
+
+    telemetryPort.capture(event);
+    hasLogged.current = true;
+  };
+
+  // カード表示時間の追跡
+  useEffect(() => {
+    if (!trackViewTime) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            viewStartTime.current = Date.now();
+          } else if (viewStartTime.current) {
+            const dwellMs = Date.now() - viewStartTime.current;
+            if (dwellMs > 1000) { // 1秒以上の表示で記録
+              logViewItem(dwellMs);
+            }
+            viewStartTime.current = null;
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+      // コンポーネント終了時にも記録
+      if (viewStartTime.current) {
+        const dwellMs = Date.now() - viewStartTime.current;
+        if (dwellMs > 500) {
+          logViewItem(dwellMs);
+        }
+      }
+    };
+  }, [trackViewTime]);
 
   const handleClick = () => {
+    // クリック時のイベント記録
+    if (trackViewTime) {
+      const clickEvent: TelemetryEvent = {
+        name: 'click_cta',
+        ts: new Date().toISOString(),
+        payload: {
+          action: 'open_detail',
+          item_id: recommendation.id
+        }
+      };
+      telemetryPort.capture(clickEvent);
+    }
+
     onClick(recommendation);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
-      onClick(recommendation);
+      handleClick();
     }
   };
 
   return (
     <Card
+      ref={cardRef}
       className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${className}`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
@@ -63,9 +154,19 @@ export const RecommendationCard = memo(function RecommendationCard({
       <div className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-semibold text-gray-900 truncate">
-              {recommendation.title}
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-gray-900 truncate flex-1">
+                {recommendation.title}
+              </h3>
+              {rankedRec?.why && rankedRec.why.length > 0 && (
+                <WhyButton
+                  why={rankedRec.why}
+                  size="sm"
+                  variant="subtle"
+                  className="flex-shrink-0"
+                />
+              )}
+            </div>
             {recommendation.subtitle && (
               <p className="text-sm text-gray-600 line-clamp-2 mt-1">
                 {recommendation.subtitle}
@@ -73,14 +174,16 @@ export const RecommendationCard = memo(function RecommendationCard({
             )}
           </div>
 
-          {recommendation.score && (
-            <div className="flex items-center ml-2">
-              <span className="text-yellow-400">★</span>
-              <span className="text-sm text-gray-600 ml-1">
-                {recommendation.score.toFixed(1)}
-              </span>
-            </div>
-          )}
+          <div className="flex items-center ml-2 gap-1">
+            {rankedRec?.score && (
+              <div className="flex items-center">
+                <span className="text-yellow-400">★</span>
+                <span className="text-sm text-gray-600 ml-1">
+                  {rankedRec.score.toFixed(1)}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="mt-3 space-y-2">
