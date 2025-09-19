@@ -17,8 +17,14 @@ import {
   LocationPort,
   CatalogPort,
   AnalyticsPort,
-  ConfigPort
+  ConfigPort,
+  TelemetryPort,
+  MLPort,
+  BehaviorDrivenRecommendationPort
 } from '../domain/recommendationPorts';
+import { TelemetryAdapterLocal } from './adapters/telemetry/TelemetryAdapterLocal';
+import { MLAdapterLocal } from './adapters/ml/MLAdapterLocal';
+import { BehaviorDrivenRecommendationAdapterLocal } from './adapters/recommendation/BehaviorDrivenRecommendationAdapterLocal';
 
 export class Container {
   private static instance: Container;
@@ -28,6 +34,11 @@ export class Container {
   private catalogPort!: CatalogPort;
   private analyticsPort!: AnalyticsPort;
   private aiRecommendationService!: AIRecommendationService;
+
+  // 新しい行動ログ駆動レコメンド用
+  private telemetryPort!: TelemetryPort;
+  private mlPort!: MLPort;
+  private behaviorDrivenRecommendationPort!: BehaviorDrivenRecommendationPort;
 
   private constructor() {
     this.configService = new ConfigService();
@@ -64,6 +75,11 @@ export class Container {
       this.catalogPort = new HttpCatalogAdapter(this.configService);
       this.analyticsPort = new HttpAnalyticsAdapter(this.configService);
     }
+
+    // 行動ログ駆動レコメンド用Adapters（常にLocal実装を使用）
+    this.telemetryPort = new TelemetryAdapterLocal();
+    this.mlPort = new MLAdapterLocal();
+    this.behaviorDrivenRecommendationPort = new BehaviorDrivenRecommendationAdapterLocal();
   }
 
   getConfigService(): ConfigPort {
@@ -88,6 +104,19 @@ export class Container {
 
   getAIRecommendationService(): AIRecommendationService {
     return this.aiRecommendationService;
+  }
+
+  // 新しい行動ログ駆動レコメンド用getters
+  getTelemetryPort(): TelemetryPort {
+    return this.telemetryPort;
+  }
+
+  getMLPort(): MLPort {
+    return this.mlPort;
+  }
+
+  getBehaviorDrivenRecommendationPort(): BehaviorDrivenRecommendationPort {
+    return this.behaviorDrivenRecommendationPort;
   }
 
   // テスト用にアダプターを差し替えるメソッド
