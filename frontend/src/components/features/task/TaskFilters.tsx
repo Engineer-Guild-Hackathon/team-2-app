@@ -17,7 +17,7 @@ export function TaskFilters({
   onFilterAssigneeChange
 }: TaskFiltersProps) {
   return (
-    <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
+    <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mb-4 sm:mb-6">
       <Select
         label="ステータス"
         value={filterStatus}

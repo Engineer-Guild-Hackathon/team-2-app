@@ -34,7 +34,7 @@ interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {}
 
 const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
   ({ className = '', children, ...props }, ref) => (
-    <div ref={ref} className={`p-6 pb-3 ${className}`} {...props}>
+    <div ref={ref} className={`p-4 sm:p-6 pb-2 sm:pb-3 ${className}`} {...props}>
       {children}
     </div>
   )
@@ -46,7 +46,7 @@ interface CardTitleProps extends HTMLAttributes<HTMLHeadingElement> {}
 
 const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(
   ({ className = '', children, ...props }, ref) => (
-    <h3 ref={ref} className={`font-semibold text-lg text-gray-900 ${className}`} {...props}>
+    <h3 ref={ref} className={`font-semibold text-base sm:text-lg text-gray-900 ${className}`} {...props}>
       {children}
     </h3>
   )
@@ -58,7 +58,7 @@ interface CardContentProps extends HTMLAttributes<HTMLDivElement> {}
 
 const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
   ({ className = '', children, ...props }, ref) => (
-    <div ref={ref} className={`p-6 pt-0 ${className}`} {...props}>
+    <div ref={ref} className={`p-4 sm:p-6 pt-0 ${className}`} {...props}>
       {children}
     </div>
   )

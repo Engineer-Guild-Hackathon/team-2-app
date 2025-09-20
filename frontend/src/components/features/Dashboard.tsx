@@ -114,22 +114,22 @@ const Dashboard = ({ members, tasks, evidence, loading }: DashboardProps) => {
   const recentActivity = getRecentActivity()
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* 概要統計 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
         <Card>
           <CardContent>
-            <div className="p-6">
+            <div className="p-3 sm:p-4 lg:p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <svg className="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                   </svg>
                 </div>
-                <div className="ml-5 w-0 flex-1">
+                <div className="ml-3 sm:ml-4 lg:ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">メンバー数</dt>
-                    <dd className="text-lg font-medium text-gray-900">{memberStats.total}</dd>
+                    <dt className="text-xs sm:text-sm font-medium text-gray-500 truncate">メンバー数</dt>
+                    <dd className="text-lg sm:text-xl lg:text-2xl font-medium text-gray-900">{memberStats.total}</dd>
                   </dl>
                 </div>
               </div>
@@ -139,17 +139,17 @@ const Dashboard = ({ members, tasks, evidence, loading }: DashboardProps) => {
 
         <Card>
           <CardContent>
-            <div className="p-6">
+            <div className="p-3 sm:p-4 lg:p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <div className="ml-5 w-0 flex-1">
+                <div className="ml-3 sm:ml-4 lg:ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">完了タスク</dt>
-                    <dd className="text-lg font-medium text-gray-900">{taskStats.doneTasks}</dd>
+                    <dt className="text-xs sm:text-sm font-medium text-gray-500 truncate">完了タスク</dt>
+                    <dd className="text-lg sm:text-xl lg:text-2xl font-medium text-gray-900">{taskStats.doneTasks}</dd>
                   </dl>
                 </div>
               </div>
@@ -159,17 +159,17 @@ const Dashboard = ({ members, tasks, evidence, loading }: DashboardProps) => {
 
         <Card>
           <CardContent>
-            <div className="p-6">
+            <div className="p-3 sm:p-4 lg:p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <svg className="h-8 w-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
                 </div>
-                <div className="ml-5 w-0 flex-1">
+                <div className="ml-3 sm:ml-4 lg:ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">進行中タスク</dt>
-                    <dd className="text-lg font-medium text-gray-900">{taskStats.doingTasks}</dd>
+                    <dt className="text-xs sm:text-sm font-medium text-gray-500 truncate">進行中</dt>
+                    <dd className="text-lg sm:text-xl lg:text-2xl font-medium text-gray-900">{taskStats.doingTasks}</dd>
                   </dl>
                 </div>
               </div>
@@ -179,17 +179,17 @@ const Dashboard = ({ members, tasks, evidence, loading }: DashboardProps) => {
 
         <Card>
           <CardContent>
-            <div className="p-6">
+            <div className="p-3 sm:p-4 lg:p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <svg className="h-8 w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <div className="ml-5 w-0 flex-1">
+                <div className="ml-3 sm:ml-4 lg:ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">エビデンス数</dt>
-                    <dd className="text-lg font-medium text-gray-900">{evidence.length}</dd>
+                    <dt className="text-xs sm:text-sm font-medium text-gray-500 truncate">エビデンス</dt>
+                    <dd className="text-lg sm:text-xl lg:text-2xl font-medium text-gray-900">{evidence.length}</dd>
                   </dl>
                 </div>
               </div>
@@ -198,7 +198,7 @@ const Dashboard = ({ members, tasks, evidence, loading }: DashboardProps) => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         {/* 完了率 */}
         <Card>
           <CardHeader>
