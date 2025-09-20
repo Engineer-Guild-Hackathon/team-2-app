@@ -18,9 +18,9 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const selectId = id || label?.toLowerCase().replace(/\s+/g, '-')
     
     const selectClasses = [
-      'block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 sm:text-sm bg-white',
-      error 
-        ? 'border-red-300 focus:border-red-500 focus:ring-red-500' 
+      'block w-full px-2 py-1.5 sm:px-3 sm:py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 text-sm bg-white',
+      error
+        ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
         : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500',
       className
     ].join(' ')

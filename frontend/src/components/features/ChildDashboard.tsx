@@ -205,7 +205,7 @@ const ChildDashboard = ({
 
         {/* きろく/ついか ボタン */}
         <div className="flex flex-col items-center gap-3">
-          <div className="flex gap-3">
+          <div className="flex gap-3 flex-wrap justify-center">
             <Button
               onClick={() => setShowEvidenceUpload(true)}
               variant="outline"
@@ -222,8 +222,16 @@ const ChildDashboard = ({
             >
               ＋ やることを つくる
             </Button>
+            <Button
+              onClick={() => window.location.href = '/recommendations/learner'}
+              variant="outline"
+              className="bg-green-100 text-green-800 border border-green-300 hover:bg-green-200 text-lg px-6 py-4 rounded-xl"
+              size="lg"
+            >
+              🤖 おすすめを みる
+            </Button>
           </div>
-          <p className="text-gray-600 mt-1 text-sm">がんばったことを きろくしたり、やることを つくれるよ</p>
+          <p className="text-gray-600 mt-1 text-sm">がんばったことを きろくしたり、やることを つくったり、AIのおすすめをみれるよ</p>
         </div>
 
         {/* 今日のやること */}
